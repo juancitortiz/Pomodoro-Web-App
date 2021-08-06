@@ -1,15 +1,10 @@
-import './App.css';
+import Pomodoro from './components/Pomodoro';
+import './styles/App.css';
 
-/*
-https://github.com/florinpop17/app-ideas/blob/master/Projects/1-Beginner/Pomodoro-Clock.md
-*/
-
-function App() {
+export default function App() {
   return (
     <div className="App">
-      pomodoro clock
+      <Pomodoro />
     </div>
   );
 }
-
-export default App;
