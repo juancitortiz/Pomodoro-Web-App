@@ -2,8 +2,10 @@ import { Fragment, useState, useEffect } from "react";
 
 export default function Pomodoro() {
     
-    const [ workingSession, setWorkingSession ] = useState(25)
-    const [ breakSession, setBreakSession ] = useState(5)
+    const [ workingSessionMin, setWorkingSessionMin ] = useState(1)
+    const [ workingSessionSeg, setWorkingSessionSeg ] = useState(0)
+    const [ breakSessionMin, setBreakSessionMin ] = useState(5)
+    const [ breakSessionSeg, setBreakSessionSeg ] = useState(0)
     const [ isPaused, setIsPaused ] = useState(true)
 
 
@@ -27,26 +29,61 @@ export default function Pomodoro() {
     }
 
     function decreaseValue() {
-        if(workingSession > 0) { 
-            setWorkingSession(workingSession - 0.01)
+        if(workingSessionMin >= 0 && workingSessionSeg >= 0) { 
+            handleWorkingSession();
         } else{
-            if(breakSession > 0)
-                setBreakSession(breakSession - 0.01)
+            if(breakSessionMin >= 0 && breakSessionSeg >= 0)
+                handleBreakSession();
+        }
+    }
+    
+    function handleWorkingSession() {
+        if(workingSessionMin > 0 && workingSessionSeg === 0){
+            setWorkingSessionMin(workingSessionMin - 1)
+            setWorkingSessionSeg(59)
+        }
+        else{
+            setWorkingSessionSeg(workingSessionSeg - 1)
         }
     }
 
+    function handleBreakSession() {
+        if(breakSessionMin > 0 && breakSessionSeg === 0){
+            setBreakSessionMin(breakSessionMin - 1)
+            setBreakSessionSeg(59)
+        }
+        else{
+            setBreakSessionSeg(breakSessionSeg - 1)
+        }
+    }
+    
     function reset() {
         console.log("reset")
-        setWorkingSession(25)
-        setBreakSession(5)
         setIsPaused(true)
+        setWorkingSessionMin(25)
+        setWorkingSessionSeg(0)
+        setBreakSessionMin(5)
+        setBreakSessionSeg(0)
+    }
+
+    function showWorkingSession() {
+        let minutes = workingSessionMin < 10 ? "0" + workingSessionMin : workingSessionMin;
+        let seconds = workingSessionSeg < 10 ? "0" + workingSessionSeg : workingSessionSeg;
+        return minutes + ":" + seconds;
+    }
+
+    function showBreakSession() {
+        let minutes = breakSessionMin < 10 ? "0" + breakSessionMin : breakSessionMin;
+        let seconds = breakSessionSeg < 10 ? "0" + breakSessionSeg : breakSessionSeg;
+        return minutes + ":" + seconds;
     }
 
     return(
         <>
             <div>
                 <div>
-                    <p>{workingSession} - {breakSession}</p>
+                    <p>{showWorkingSession()} |  
+                       {showBreakSession()}</p>
                 </div>
                 <hr />
                 <div>
